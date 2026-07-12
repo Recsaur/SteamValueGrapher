@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Steam Value Comparator Grapher</title>
+    </head>
+    <body>
+        <form id="SteamID" action="/UsersSubmit" method="POST">
+            {% for form in range(1,users+1) %}
+                    <label for="SteamID_{{form}}">Enter Steam ID</label>
+                    <input id="SteamID_{{form}}" name="SteamID_{{form}}" type="text" placeholder="Enter Steam ID">
+            {% endfor %}
+            <button type="submit">Submit</button>
+        </form>
+    </body>
+</html>

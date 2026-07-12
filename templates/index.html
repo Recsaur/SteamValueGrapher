@@ -4,9 +4,9 @@
         <title>Steam Value Comparator Grapher</title>
     </head>
     <body>
-        <form id="SteamID" action="/submit" method="get">
-            <label for="SteamID">Enter Steam ID</label>
-            <input id="SteamID" type="text" name="SteamID">
+        <form id="UsersNum" action="/submit" method="POST">
+            <label for="UsersNum">How many users?</label>
+            <input id="UsersNum" type="number" name="UsersNum" min="1" required>
             <button type="submit">Submit</button>
         </form>
     </body>

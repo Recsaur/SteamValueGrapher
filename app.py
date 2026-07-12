@@ -16,12 +16,25 @@ def home():
 
     #return jsonify({"message": "Hii its flask api"})
 
-@app.route("/submit", methods=["GET"])
+@app.route("/submit", methods=["POST"])
 def submit():
-    Steam_id = request.args.get("SteamID")
-    Total_games = get_user_games(Steam_id)
-    Username = get_username(Steam_id)
-    return f"{Username} {Total_games}"
+    form_count = int(request.form.get("UsersNum",1))
+    return render_template("InputGraph.html", users=form_count)
+
+@app.route("/UsersSubmit", methods=["POST"])
+def UsersSubmit():
+    answers = []
+    for key in request.form:
+        if key.startswith("SteamID_"):
+            steam_id = request.form.get(key)
+            if steam_id:
+
+        #Steam_id = request.form.get("SteamID")
+                Total_games = get_user_games(steam_id)
+                Username = get_username(steam_id)
+                game_count = len(Total_games)
+                answers.append(f"{Username}: {game_count} games")
+    return "<br>".join(answers)
     #print(get_user_games(Steam_id))
 
 
