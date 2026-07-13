@@ -24,6 +24,10 @@ def submit():
 @app.route("/UsersSubmit", methods=["POST"])
 def UsersSubmit():
     answers = []
+    class User_Contribution:
+            def __init__(self, username, game_num):
+                self.username = username
+                self.game_num = game_num
     famshare_taken = request.form.get("famshare")
     if famshare_taken:
         famshare_answer = True
@@ -40,8 +44,22 @@ def UsersSubmit():
                     #Total_games = game_list_filter(appid_games)
                 Username = get_username(steam_id)
                 game_count = len(Total_games)
-                answers.append(f"{Username}: {game_count} games")
-    return "<br>".join(answers)
+                CurrentUser = User_Contribution(Username,game_count)
+                answers.append(CurrentUser)
+                #answers.append(f"{Username}: {game_count} games")
+                
+    usernames_list = []
+    total_games_list = []
+    for user in answers:
+        usernames_list.append(user.username)
+    for games in answers:
+        total_games_list.append(games.game_num)
+    print(usernames_list)
+    print(total_games_list)
+    print("HEYYYYYY HERERERERRERERERE")
+    #taken_answers = "<br>".join(answers)
+    print(answers)
+    return render_template("UsersSubmit.html",usernames_list=usernames_list,total_games_list=total_games_list)
     #print(get_user_games(Steam_id))
 
 
