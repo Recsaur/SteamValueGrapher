@@ -29,6 +29,7 @@ def UsersSubmit():
                 self.username = username
                 self.game_num = game_num
     famshare_taken = request.form.get("famshare")
+    chosen_comparison = request.form.get("comparison-type")
     if famshare_taken:
         famshare_answer = True
     else:
@@ -39,12 +40,25 @@ def UsersSubmit():
             steam_id = request.form.get(key)
             if steam_id:
         #Steam_id = request.form.get("SteamID")
-                Total_games = get_user_games(steam_id,famshare_answer)
-                #if famshare_answer:
-                    #Total_games = game_list_filter(appid_games)
-                Username = get_username(steam_id)
-                game_count = len(Total_games)
-                CurrentUser = User_Contribution(Username,game_count)
+                print(chosen_comparison,"MMMMM")
+                if chosen_comparison == "value":
+                    Total_games = get_user_games(steam_id,famshare_answer,chosen_comparison)
+                    total_value = 0
+                    for game in Total_games:
+                        app_id = str(game["appid"])
+                        price = get_game_price(app_id)
+                        print(price)
+                        if price is not None:
+                            total_value += price
+                    Username = get_username(steam_id)
+                    CurrentUser = User_Contribution(Username,total_value)
+                elif chosen_comparison == "game-count":
+                    Total_games = get_user_games(steam_id,famshare_answer,chosen_comparison)
+                    #if famshare_answer:
+                        #Total_games = game_list_filter(appid_games)
+                    Username = get_username(steam_id)
+                    game_count = len(Total_games)
+                    CurrentUser = User_Contribution(Username,game_count)
                 answers.append(CurrentUser)
                 #answers.append(f"{Username}: {game_count} games")
                 
@@ -54,16 +68,16 @@ def UsersSubmit():
         usernames_list.append(user.username)
     for games in answers:
         total_games_list.append(games.game_num)
-    print(usernames_list)
-    print(total_games_list)
+    #print(usernames_list)
+    #print(total_games_list)
     print("HEYYYYYY HERERERERRERERERE")
     #taken_answers = "<br>".join(answers)
-    print(answers)
+    #print(answers)
     return render_template("UsersSubmit.html",usernames_list=usernames_list,total_games_list=total_games_list)
     #print(get_user_games(Steam_id))
 
 
-def get_user_games(steam_id,famshare):
+def get_user_games(steam_id,famshare,comparison_type):
     url = f"{base_url}/IPlayerService/GetOwnedGames/v0001/?key={API_KEY}&steamid={steam_id}&format=json&include_appinfo=1"
     response = requests.get(url)
     Games_name_list = []
@@ -74,11 +88,18 @@ def get_user_games(steam_id,famshare):
         games_list = response_data.get("games", [])
         #gamesid_list = response_data.get("appid", [])
         for game in games_list:
-            if famshare:
-                if game_is_famshare(game["appid"]):
-                    Games_name_list.append(game["name"])
+            if comparison_type == "value":
+                if famshare:
+                    if game_is_famshare(game["appid"]):
+                        Games_name_list.append({"name": game["name"], "appid": game["appid"]})
+                else:
+                    Games_name_list.append({"name": game["name"], "appid": game["appid"]})
             else:
-                Games_name_list.append(game["name"])
+                if famshare:
+                    if game_is_famshare(game["appid"]):
+                        Games_name_list.append({"name": game["name"], "appid": game["appid"]})
+                else:
+                    Games_name_list.append({"name": game["name"], "appid": game["appid"]})
         return Games_name_list
     else:
         print("Failed to retrieve user game library")
@@ -102,6 +123,38 @@ def game_is_famshare(app_id):
                                 return True
                         print("No family share...")
                         return False
+
+def get_game_price(app_id):
+    url = f"https://store.steampowered.com/api/appdetails?appids={app_id}&filters=price_overview&cc=ae"
+    response = requests.get(url)
+    if response.status_code == 200:
+        print("Game price retrieved")
+        game_data = response.json()
+        if isinstance(game_data, dict):
+            if app_id in game_data:
+                if game_data[app_id].get("success"):
+                    if "price_overview" in game_data[app_id]["data"]:
+                        price_info = game_data[app_id]["data"]["price_overview"]
+                        if price_info["discount_percent"] == 0:
+                            final_price = price_info.get("final", 0) / 100.0
+                        else:
+                            final_price = price_info.get("initial", 0) / 100.0
+                        return final_price
+                    else:
+                        print("Price unavailable")
+                        return None
+                else:
+                    print("Failed to get the game details")
+                    return None
+            else:
+                print("no app id data")
+                return None
+        else:
+            print("Unable to get the game data")
+            return None
+    else:
+        print("Failed to even retrieve the data")
+        return None
 
 def game_list_filter(game_list):
     new_game_list = []

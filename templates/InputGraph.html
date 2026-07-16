@@ -1,17 +1,123 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link href="https://fonts.googleapis.com/css2?family=Gaegu&family=Gorditas:wght@400;700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+        <style>
+            html {
+                background-color: blue;
+                background-image: url("{{ url_for('static', filename='grid.png')}}"), linear-gradient(to bottom, #26303B, #1E1E1E);
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }
+            h1 {
+                color: white;
+                text-align: center;
+                font-family: Inter;
+                font-size: 50px;
+                padding-bottom: 25px;
+                border-bottom: 5px solid #ffffff;
+            }
+            p {
+                font-size: 20px;
+                text-align: center;
+            }
+
+            .whatitdoes {
+                background-color: #1F232E;
+                font-size: 20px;
+                font-family: Inter;
+                color: white;
+                width: 500px;
+                padding-top: 0.001%;
+                padding-bottom: 0.001%;
+                text-align: center;
+                border-radius: 10px;
+                margin-right: 50px;
+                box-shadow: 0 11px 0px 10px rgba(0, 0, 0, 0.35);
+            }
+
+            .input-space {
+                background-color: #1F232E;
+                font-size: 20px;
+                font-family: Inter;
+                color: white;
+                width: 225px;
+                text-align: center;
+                padding-bottom: 35px;
+                border-radius: 10px;
+                margin-top: -60px;
+                margin-left: 225px;
+                box-shadow: 0 11px 0px 10px rgba(0, 0, 0, 0.35);
+            }
+
+            .left-side {
+                justify-content: flex-start;
+                display: flex;
+            }
+
+            .right-side {
+                display: flex;
+                flex-direction: column;
+                gap: 75px;
+            }
+
+            .content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .nav {
+                margin-top: -25px;
+            }
+
+        </style>
         <title>Steam Value Comparator Grapher</title>
+        <h1>Steam Value Comparison Grapher</h1>
+        <div class="nav" style="text-align: center;"">
+            <p style="color: white; font-family: Inter; font-size: 15px; margin-right: 25px;">Built by <a href="https://github.com/Recsaur">Recsaur</a> | <a href="https://github.com/Recsaur/SteamValueGrapher">Source code on GitHub</a></p>
+        </div>
+        <br>
+        <br>
     </head>
     <body>
-        <form id="SteamID" action="/UsersSubmit" method="POST">
-            {% for form in range(1,users+1) %}
-                    <label for="SteamID_{{form}}">Enter Steam ID</label>
-                    <input id="SteamID_{{form}}" name="SteamID_{{form}}" type="text" placeholder="Enter Steam ID">
-            {% endfor %}
-            <button type="submit">Submit</button>
-            <input type="checkbox" name="famshare" id="famshare">
-            <label for="famshare">Games with family sharing</label>
-        </form>
+        <div class="content">
+            <div class="left-side">
+                <div class="input-space">
+                    <h2 style="margin: 5px;">Users</h2>
+                    <form id="SteamID" action="/UsersSubmit" method="POST">
+                        {% for form in range(1,users+1) %}
+                                <input id="SteamID_{{form}}" name="SteamID_{{form}}" type="text" placeholder="Enter Steam ID" required>
+                        {% endfor %}
+                        <button type="submit">Submit</button>
+                        <br>
+                        <input type="radio" name="comparison-type" id="value" value="value" required>
+                        <label style="font-size: 14px;" for="value">Compare Game Price Values</label>
+                        <br>
+                        <input type="radio" name="comparison-type" id="game-count" value="game-count" required>
+                        <label style="font-size: 14px;" for="game-count">Compare Number of Games</label>
+                        <br>
+                        <input type="checkbox" name="famshare" id="famshare">
+                        <label style="font-size: 14px;" for="famshare">Family Share Games</label>
+                    </form>
+                </div>
+            </div>
+            <div class="right-side">
+                <div class="whatitdoes">
+                    <h2 style="margin-top: 10px">What does it do?</h2>
+                    <p style="font-size: 75%; margin-top: -25px; margin-bottom: 15px; margin-left: 10px; margin-right: 10px;">This tool is for comparing Steam accounts and their game libraries. It was mainly made for Steam family, seeing which member contributed most in the family, but it can also be used to compare with the Steam accounts of random people or with friends</p>
+                </div>
+                <div class="whatitdoes">
+                    <h2 style="margin-top: 10px">How to use it</h2>
+                    <ol style="text-align: left; font-size: 75%; margin-top: -25px; margin-bottom: 15px; margin-left: 10px; margin-right: 10px;">
+                        <li>Enter how many accounts to compare</li>
+                        <li>Input their Steam IDs (these can be found in the links of their accounts)</li>
+                        <li>On the same page of inputting Steam IDs, choose what to compare and optional filters, then submit.</li>
+                        <li>Done! You can also choose what type of graph to display the data</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    
     </body>
 </html>
