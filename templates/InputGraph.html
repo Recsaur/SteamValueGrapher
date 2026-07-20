@@ -43,7 +43,7 @@
                 color: white;
                 width: 225px;
                 text-align: center;
-                padding-bottom: 35px;
+                padding-bottom: 15px;
                 border-radius: 10px;
                 margin-top: -60px;
                 margin-left: 225px;
@@ -59,6 +59,13 @@
                 display: flex;
                 flex-direction: column;
                 gap: 75px;
+            }
+
+            .disclaimer {
+                background-color: #6f1422;
+                font-family: Inter;
+                color: rgb(255, 255, 255);
+                border-radius: 10px;
             }
 
             .content {
@@ -85,11 +92,10 @@
             <div class="left-side">
                 <div class="input-space">
                     <h2 style="margin: 5px;">Users</h2>
-                    <form id="SteamID" action="/UsersSubmit" method="POST">
+                    <form id="SteamID" action="/UsersSubmit" method="POST" onsubmit="document.getElementById('submitbutton').disabled=true;">
                         {% for form in range(1,users+1) %}
                                 <input id="SteamID_{{form}}" name="SteamID_{{form}}" type="text" placeholder="Enter Steam ID" required>
                         {% endfor %}
-                        <button type="submit">Submit</button>
                         <br>
                         <input type="radio" name="comparison-type" id="value" value="value" required>
                         <label style="font-size: 14px;" for="value">Compare Game Price Values</label>
@@ -99,7 +105,18 @@
                         <br>
                         <input type="checkbox" name="famshare" id="famshare">
                         <label style="font-size: 14px;" for="famshare">Family Share Games</label>
+                        <br>
+                        <button type="submit" id="submitbutton">Submit</button>
                     </form>
+                    <button onclick="window.history.back()">Back</button>
+                    <div class="disclaimer">
+                        <h3 style="font-size: 16px; text-align: center;">!!!DISCLAIMER!!!</h3>
+                        <ul style="font-size: 12px; text-align: left; margin-top: -15px;">
+                            <li>Big libraries will make it take a while to load (just trust, it's loading it)</li>
+                            <li>Private accounts can't be counted, they'll show as 0</li>
+                            <li>Repeat users sometimes bugs the program</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="right-side">
