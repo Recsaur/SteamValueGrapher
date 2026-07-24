@@ -73,7 +73,7 @@ def UsersSubmit():
     print("HEYYYYYY HERERERERRERERERE")
     #taken_answers = "<br>".join(answers)
     #print(answers)
-    return render_template("UsersSubmit.html",usernames_list=usernames_list,total_games_list=total_games_list)
+    return render_template("UsersSubmit.html",usernames_list=usernames_list,total_games_list=total_games_list,compare_type = chosen_comparison)
     #print(get_user_games(Steam_id))
 
 
@@ -125,7 +125,7 @@ def game_is_famshare(app_id):
                         return False
 
 def get_game_price(app_id):
-    url = f"https://store.steampowered.com/api/appdetails?appids={app_id}&filters=price_overview&cc=ae"
+    url = f"https://store.steampowered.com/api/appdetails?appids={app_id}&filters=price_overview&cc=us"
     response = requests.get(url)
     if response.status_code == 200:
         print("Game price retrieved")

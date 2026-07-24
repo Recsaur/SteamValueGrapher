@@ -1,45 +1,143 @@
+
 <!DOCTYPE html>
 <html>
     <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+        src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     </script>
     <head>
-        <title>Steam Value Comparator Grapher</title>
-    </head>
-    <body>
-        <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-        <script>
-        var xValues = {{usernames_list | tojson}};
-        var yValues = {{total_games_list | tojson}};
-        var barColors = [
-        "#b91d47",
-        "#00aba9",
-        "#2b5797",
-        "#e8c3b9",
-        "#1e7145"
-        ];
-
-        new Chart("myChart", {
-        type: "pie",
-        data: {
-            labels: xValues,
-            datasets: [{
-            backgroundColor: barColors,
-            data: yValues
-            }]
-        },
-        options: {
-            title: {
-            display: true,
-            text: "Comparison of Number of Games"
+        <link href="https://fonts.googleapis.com/css2?family=Gaegu&family=Gorditas:wght@400;700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+        <style>
+            html {
+                background-color: blue;
+                background-image: url("{{ url_for('static', filename='grid.png')}}"), linear-gradient(to bottom, #26303B, #1E1E1E);
+                background-repeat: no-repeat;
+                background-attachment: fixed;
             }
-        }
-        });
-        </script>
-    <head>
-        <title>Steam Value Comparator Grapher</title>
+            h1 {
+                color: white;
+                text-align: center;
+                font-family: Inter;
+                font-size: 50px;
+                padding-bottom: 25px;
+                border-bottom: 5px solid #ffffff;
+            }
+            p {
+                font-size: 20px;
+                text-align: center;
+            }
+
+            .whatitdoes {
+                background-color: #1F232E;
+                font-size: 20px;
+                font-family: Inter;
+                color: white;
+                width: 500px;
+                padding-top: 0.001%;
+                padding-bottom: 0.001%;
+                text-align: center;
+                border-radius: 10px;
+                margin-right: 50px;
+                box-shadow: 0 11px 0px 10px rgba(0, 0, 0, 0.35);
+            }
+
+            .input-space {
+                background-color: #1F232E;
+                font-size: 20px;
+                font-family: Inter;
+                color: white;
+                width: 500px;
+                text-align: center;
+                border-radius: 10px;
+                margin-top: -60px;
+                margin-left: 125px;
+                padding-bottom: 10px;
+                box-shadow: 0 11px 0px 10px rgba(0, 0, 0, 0.35);
+            }
+
+            .left-side {
+                justify-content: flex-start;
+                display: flex;
+            }
+
+            .right-side {
+                display: flex;
+                flex-direction: column;
+                gap: 75px;
+            }
+            
+
+            .content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .nav {
+                margin-top: -25px;
+            }
+        </style>
+        <h1>Steam Library Comparator Grapher</h1>
+        <div class="nav" style="text-align: center;">
+            <p style="color: white; font-family: Inter; font-size: 15px; margin-right: 25px;">Built by <a href="https://github.com/Recsaur">Recsaur</a> | <a href="https://github.com/Recsaur/SteamValueGrapher">Source code on GitHub</a></p>
+        </div>
+        <br>
+        <br>
     </head>
     <body>
+        <div class="content">
+            <div class="left-side">
+                <div class="input-space">
+                    <canvas id="myChart" style="width:100%;max-width:1000px"></canvas>
+                    <script>
+                        var xValues = {{usernames_list | tojson}};
+                        var yValues = {{total_games_list | tojson}};
+                        var barColors = [
+                        "#b91d47",
+                        "#00aba9",
+                        "#2b5797",
+                        "#e8c3b9",
+                        "#1e7145"
+                        ];
+
+                        new Chart("myChart", {
+                        type: "pie",
+                        data: {
+                            labels: xValues,
+                            datasets: [{
+                            backgroundColor: barColors,
+                            data: yValues
+                            }]
+                        },
+                        options: {
+                            title: {
+                            display: true,
+                            text: "Comparison of " + {{compare_type | tojson}} + " of Games"
+                            }
+                        }
+                        });
+                    </script>
+                    <br>
+                    <a href="/" style="font-size: 16px;">Make New Graph</a>
+                    <br>
+                    <button onclick="window.history.back()">Back</button>
+                </div>
+            </div>
+            <div class="right-side">
+                <div class="whatitdoes">
+                    <h2 style="margin-top: 10px">What does it do?</h2>
+                    <p style="font-size: 75%; margin-top: -25px; margin-bottom: 15px; margin-left: 10px; margin-right: 10px;">This tool is for comparing Steam accounts and their game libraries. It was mainly made for Steam family, seeing which member contributed most in the family, but it can also be used to compare with the Steam accounts of random people or with friends</p>
+                </div>
+                <div class="whatitdoes">
+                    <h2 style="margin-top: 10px">How to use it</h2>
+                    <ol style="text-align: left; font-size: 75%; margin-top: -25px; margin-bottom: 15px; margin-left: 10px; margin-right: 10px;">
+                        <li>Enter how many accounts to compare</li>
+                        <li>Input their Steam IDs (these can be found in the links of their accounts)</li>
+                        <li>On the same page of inputting Steam IDs, choose what to compare and optional filters, then submit.</li>
+                        <li>Done! You can also choose what type of graph to display the data</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    
     </body>
 </html>
-
